@@ -38,3 +38,37 @@ unsigned char* j_descomprimirRLE(unsigned char* j_dataComprimida, unsigned int j
 
     return j_salida;
 }
+
+unsigned char* j_comprimirRLE(unsigned char* j_dataOriginal, unsigned int j_tamOriginal, unsigned int& j_tamComprimido)
+{
+    if (j_tamOriginal == 0)
+    {
+        j_tamComprimido = 0;
+        return nullptr;
+    }
+
+    unsigned int j_capacidadSalida = j_tamOriginal * 2;
+    unsigned char* j_salida = new unsigned char[j_capacidadSalida];
+    j_tamComprimido = 0;
+
+    unsigned int i = 0;
+    while (i < j_tamOriginal)
+    {
+        unsigned char j_caracterActual = j_dataOriginal[i];
+        unsigned char j_conteo = 0;
+        unsigned int k = i;
+        while (k < j_tamOriginal && j_dataOriginal[k] == j_caracterActual && j_conteo < 255)
+        {
+            j_conteo++;
+            k++;
+        }
+
+        j_salida[j_tamComprimido] = j_conteo;
+        j_tamComprimido++;
+        j_salida[j_tamComprimido] = j_caracterActual;
+        j_tamComprimido++;
+        i += j_conteo;
+    }
+
+    return j_salida;
+}
