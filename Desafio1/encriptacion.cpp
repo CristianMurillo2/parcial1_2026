@@ -23,3 +23,18 @@ unsigned char* j_desencriptarMensaje(unsigned char* j_dataEncriptada, unsigned i
 
     return j_datosDesencriptados;
 }
+
+char* convertirABinario(int numero) {
+    char* binario = new char[9];
+    unsigned char byte = static_cast<unsigned char>(numero);
+
+    for (int i = 0; i < 8; i++) {
+        if ((byte & (128 >> i)) != 0) {
+            binario[i] = '1';
+        } else {
+            binario[i] = '0';
+        }
+    }
+    binario[8] = '\0';
+    return binario;
+}
