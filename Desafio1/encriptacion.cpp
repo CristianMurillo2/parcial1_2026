@@ -24,7 +24,7 @@ unsigned char* j_desencriptarMensaje(unsigned char* j_dataEncriptada, unsigned i
     return j_datosDesencriptados;
 }
 
-char* convertirABinario(int numero) {
+char* convertirABin(int numero) {
     char* binario = new char[9];
     unsigned char byte = static_cast<unsigned char>(numero);
 
@@ -37,4 +37,21 @@ char* convertirABinario(int numero) {
     }
     binario[8] = '\0';
     return binario;
+}
+
+
+void quitarEspaciosEnMemoria(unsigned char* datos) {
+    if (datos == nullptr) {
+        return;
+    }
+
+    int indiceEscritura = 0;
+    for (int indiceLectura = 0; datos[indiceLectura] != '\0'; indiceLectura++) {
+        if (datos[indiceLectura] != ' ') {
+            datos[indiceEscritura] = datos[indiceLectura];
+            indiceEscritura++;
+        }
+    }
+
+    datos[indiceEscritura] = '\0';
 }
