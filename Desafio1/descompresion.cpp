@@ -12,11 +12,15 @@ unsigned char* j_descomprimirRLE(unsigned char* j_dataComprimida, unsigned int j
     unsigned char* j_salida = new unsigned char[j_capSalida];
     j_tamDescomprimido = 0;
 
+
     for (unsigned int i = 0; i < j_tamComprimido; i += 2)
     {
-        unsigned char j_repeticiones = j_dataComprimida[i];
+        unsigned int j_repeticiones = j_dataComprimida[i];
+        j_repeticiones = j_repeticiones - 48;
         unsigned char caracter = j_dataComprimida[i + 1];
-
+        if(i==j_tamComprimido) {
+           j_salida[j_tamComprimido] ='\0';
+        }
         if (j_tamDescomprimido + j_repeticiones > j_capSalida)
         {
             unsigned int j_nuevaCapacidad = j_capSalida * 2;
@@ -35,6 +39,7 @@ unsigned char* j_descomprimirRLE(unsigned char* j_dataComprimida, unsigned int j
             j_tamDescomprimido++;
         }
     }
+    j_salida[j_tamDescomprimido] = '\0';
 
     return j_salida;
 }

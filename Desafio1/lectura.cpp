@@ -52,6 +52,7 @@ char *leerArchivo(const char *nombreArchivo, long longitud)
     char* buffer = new char[longitud]; // se guarda tal cual en binario
     archivo.read(buffer, longitud);
     archivo.close();
+    buffer[longitud] = '\0';
     return buffer;
 }
 
