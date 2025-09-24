@@ -2,10 +2,10 @@
 
 void lectura()
 {
-    const char* nombre = "Encriptado3.txt"; // archivo de texto
+    const char* nombre = "Encriptado3.txt";
     long longitud = obtenerLongitudArchivo(nombre);
     if (longitud == -1) exit(1);
-    ifstream archivo("texto.txt",ios::in); // Abrir el archivo en modo lectura
+    ifstream archivo("texto.txt",ios::in);
     cout << "Directorio actual: " << filesystem::current_path() << endl; //comprobar donde esta el ejecutable
     cout << "Longitud del archivo: " << longitud << " bytes" << endl;
     char* contenido = leerArchivo(nombre, longitud);
@@ -75,7 +75,7 @@ void leer()
 char *convertirABinario(const char *contenido, long longitud) //falta liberar la memoria de binario[]
 {
     long tamanoBinario = longitud * 9;
-    char* binario = new char[tamanoBinario + 1]; // +1 para '\0'
+    char* binario = new char[tamanoBinario + 1];
     long pos = 0;
     for (long i = 0; i < longitud; i++) {
         unsigned char c = static_cast<unsigned char>(contenido[i]);
