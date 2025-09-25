@@ -77,15 +77,37 @@ char* obtenerBytes(const char* contenido, long longitud) {
     if (longitud <= 0 || contenido == nullptr) {
         return nullptr;
     }
-
-    // 1. Reserva un nuevo arreglo de char del mismo tamaño
     char* copiaDeBytes = new char[longitud];
-
-    // 2. Copia cada byte del original al nuevo arreglo
-    //     El valor binario interno se copia directamente
     for (long i = 0; i < longitud; i++) {
         copiaDeBytes[i] = contenido[i];
     }
 
     return copiaDeBytes;
+}
+
+void intAChars(int num, char* buffer, int& pos) {
+    char temp[10];
+    int t = 0;
+    do {
+        temp[t++] = (num % 10) + '0';
+        num /= 10;
+    } while (num > 0);
+    for (int i = t - 1; i >= 0; i--) {
+        buffer[pos++] = temp[i];
+    }
+}
+
+char* construirNombre(const char* base, int num, const char* extension) {
+    char* nombre = new char[50];
+    int pos = 0;
+    for (int i = 0; base[i] != '\0'; i++) {
+        nombre[pos++] = base[i];
+    }
+    intAChars(num, nombre, pos);
+    for (int i = 0; extension[i] != '\0'; i++) {
+        nombre[pos++] = extension[i];
+    }
+
+    nombre[pos] = '\0';
+    return nombre;
 }
