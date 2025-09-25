@@ -49,7 +49,7 @@ char *leerArchivo(const char *nombreArchivo, long longitud)
         cerr << "No se pudo abrir el archivo." << endl;
         return nullptr;
     }
-    char* buffer = new char[longitud]; // se guarda tal cual en binario
+    char* buffer = new char[longitud+1]; // se guarda tal cual en binario
     archivo.read(buffer, longitud);
     archivo.close();
     buffer[longitud] = '\0';
@@ -78,11 +78,11 @@ char* obtenerBytes(const char* contenido, long longitud) {
         return nullptr;
     }
 
-    // 1. Reserva un nuevo arreglo de char del mismo tamaño.
+    // 1. Reserva un nuevo arreglo de char del mismo tamaño
     char* copiaDeBytes = new char[longitud];
 
-    // 2. Copia cada byte del original al nuevo arreglo.
-    //     El valor binario interno se copia directamente.
+    // 2. Copia cada byte del original al nuevo arreglo
+    //     El valor binario interno se copia directamente
     for (long i = 0; i < longitud; i++) {
         copiaDeBytes[i] = contenido[i];
     }

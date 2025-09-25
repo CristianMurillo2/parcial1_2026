@@ -1,4 +1,7 @@
 #include "descompresion.h"
+#include <iostream>
+
+using namespace std;
 
 void j_copiarMemoria(unsigned char* j_destino, unsigned char* j_fuente, unsigned int j_tamano) {
     for (unsigned int i = 0; i < j_tamano; ++i) {
@@ -15,6 +18,10 @@ unsigned char* j_descomprimirRLE(unsigned char* j_dataComprimida, unsigned int j
 
     for (unsigned int i = 0; i < j_tamComprimido; i += 2)
     {
+        if(!(48 <= j_dataComprimida[i] && j_dataComprimida[i] <= 57)){
+            return j_salida;
+        }
+
         unsigned int j_repeticiones = j_dataComprimida[i];
         j_repeticiones = j_repeticiones - 48;
         unsigned char caracter = j_dataComprimida[i + 1];

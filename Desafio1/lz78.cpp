@@ -108,9 +108,6 @@ void lz78_compress(char *input, int **out_prefix, char **out_char, int *out_size
     free(ch);
 }
 
-// --- Funciones auxiliares para no usar <cstring> ---
-
-// Implementación simple de strlen
 size_t strlen_manual(const char* str) {
     size_t len = 0;
     while (str[len] != '\0') {
@@ -119,7 +116,6 @@ size_t strlen_manual(const char* str) {
     return len;
 }
 
-// Implementación simple de strcpy
 void strcpy_manual(char* dest, const char* src) {
     size_t i = 0;
     while (src[i] != '\0') {
@@ -129,30 +125,17 @@ void strcpy_manual(char* dest, const char* src) {
     dest[i] = '\0';
 }
 
-/**
- * @brief Descomprime datos LZ78 sin usar librerías STL.
- * @param prefix Puntero al array de índices del diccionario (1-based).
- * @param ch Puntero al array de caracteres.
- * @param n El número de pares (prefijo, caracter).
- * @param decompressed_size Referencia donde se almacenará el tamaño final.
- * @return Un puntero a un nuevo buffer (unsigned char*) con los datos descomprimidos.
- * ¡IMPORTANTE! El código que llama a esta función es responsable de liberar esta memoria usando delete[].
- */
-unsigned char* lz78_decompress_no_lib(const int* prefix, const unsigned char* ch, int n, size_t& decompressed_size) {
-    // 1. --- Configuración del diccionario (array de punteros a char) ---
+unsigned char* lz78_decompress(const int* prefix, const unsigned char* ch, int n, size_t& decompressed_size) {
     if (n <= 0) {
         decompressed_size = 0;
         return nullptr;
     }
     char** dictionary = new char*[n];
     size_t dictionary_len = 0;
-
-    // 2. --- Configuración del buffer de salida dinámico ---
-    size_t output_capacity = 256; // Capacidad inicial
+    size_t output_capacity = 256;
     size_t output_size = 0;
     unsigned char* output_buffer = new unsigned char[output_capacity];
 
-    // 3. --- Bucle principal de descompresión ---
     for (int i = 0; i < n; ++i) {
         int prefix_index = prefix[i];
         char current_char = static_cast<char>(ch[i]);
@@ -160,17 +143,14 @@ unsigned char* lz78_decompress_no_lib(const int* prefix, const unsigned char* ch
         size_t new_word_len = 0;
 
         if (prefix_index == 0) {
-            // Caso base: el caracter es nuevo.
             new_word_len = 1;
-            new_word = new char[2]; // 1 para el char + 1 para el '\0'
+            new_word = new char[2];
             new_word[0] = current_char;
             new_word[1] = '\0';
         } else {
-            // El nuevo término es una entrada existente + el nuevo caracter.
             size_t dict_idx = static_cast<size_t>(prefix_index - 1);
             if (dict_idx >= dictionary_len) {
                 std::cerr << "Error: Índice de prefijo inválido: " << prefix_index << std::endl;
-                // Liberar toda la memoria asignada antes de salir
                 delete[] output_buffer;
                 for (size_t k = 0; k < dictionary_len; ++k) delete[] dictionary[k];
                 delete[] dictionary;
@@ -181,14 +161,11 @@ unsigned char* lz78_decompress_no_lib(const int* prefix, const unsigned char* ch
             const char* prefix_word = dictionary[dict_idx];
             size_t prefix_len = strlen_manual(prefix_word);
             new_word_len = prefix_len + 1;
-            new_word = new char[new_word_len + 1]; // +1 para el '\0'
-
+            new_word = new char[new_word_len + 1];
             strcpy_manual(new_word, prefix_word);
             new_word[prefix_len] = current_char;
             new_word[new_word_len] = '\0';
         }
-
-        // Añadir la nueva palabra al buffer de salida, redimensionando si es necesario.
         if (output_size + new_word_len > output_capacity) {
             size_t new_capacity = output_capacity * 2;
             if (new_capacity < output_size + new_word_len) {
@@ -202,29 +179,20 @@ unsigned char* lz78_decompress_no_lib(const int* prefix, const unsigned char* ch
             output_buffer = new_buffer;
             output_capacity = new_capacity;
         }
-
-        // Copiar la nueva palabra al buffer de salida
         for (size_t j = 0; j < new_word_len; ++j) {
             output_buffer[output_size++] = static_cast<unsigned char>(new_word[j]);
         }
-
-        // Añadir la nueva palabra al diccionario.
         dictionary[dictionary_len++] = new_word;
     }
-
-    // 4. --- Limpieza y preparación del resultado final ---
     decompressed_size = output_size;
     unsigned char* final_result = new unsigned char[decompressed_size];
     for (size_t i = 0; i < decompressed_size; ++i) {
         final_result[i] = output_buffer[i];
     }
-
-    // Liberar toda la memoria intermedia
     delete[] output_buffer;
     for (size_t i = 0; i < dictionary_len; ++i) {
         delete[] dictionary[i];
     }
     delete[] dictionary;
-
     return final_result;
 }

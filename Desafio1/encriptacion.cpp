@@ -14,7 +14,7 @@ unsigned char* j_desencriptarMensaje(unsigned char* j_dataEncriptada, unsigned i
     for (unsigned int i = 0; i < j_tamano; ++i) {
         unsigned char j_byteActual = j_dataEncriptada[i];
 
-        j_byteActual = j_byteActual ^ (unsigned char)j_claveK; //(nos ayuda a verlo como un char de 1 byte)
+        j_byteActual = j_byteActual ^ (unsigned char)j_claveK;
 
         j_byteActual = j_rotarDerecha(j_byteActual, j_rotacionN);
 

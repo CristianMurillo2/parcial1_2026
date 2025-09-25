@@ -7,15 +7,17 @@ using namespace std;
 
 int main()
 {
-    const char* nombreDeArchivo = "Encriptado1.txt";
-    const char* nombreDePista = "pista1.txt";
+    const char* nombreDeArchivo = "Encriptado3.txt";
+    const char* nombreDePista = "pista3.txt";
 
     long longitudEncriptado = obtenerLongitudArchivo(nombreDeArchivo);
+    //cout << longitudEncriptado << endl << endl;
     char* textoEncriptado = leerArchivo(nombreDeArchivo, longitudEncriptado);
+    //cout << textoEncriptado;
 
     long longitudPista = obtenerLongitudArchivo(nombreDePista);
     char* textoPista = leerArchivo(nombreDePista, longitudPista);
-    cout << textoPista;
+    //cout << textoPista;
 
     //control datos
     /*
@@ -26,21 +28,26 @@ int main()
     for (long i = 0; i < longitudPista; i++) {
         cout << textoPista[i];
     } */
-    //RLE
-    for(unsigned int rotacion = 3; rotacion < 4; rotacion++){
-        for(unsigned int clave = 91; clave < 92 ; clave++){
+    //RLE{
+    for(unsigned int rotacion = 1; rotacion < 8; rotacion++){
+        for(unsigned int clave = 1; clave < 256 ; clave++){
+            //cout << endl<<clave << endl;
             unsigned char* textoEncrip = static_cast<unsigned char*>(reinterpret_cast<void*>(textoEncriptado));
             unsigned char * desencriptado = j_desencriptarMensaje(textoEncrip, longitudEncriptado, (clave), rotacion); // clave+1
+            //cout << desencriptado;
             quitarEspaciosEnMemoria(desencriptado);
             unsigned int tamano = longitudE(desencriptado);
 
             for(int i=0; i < tamano ; i++){
-                if(i % 2 == 0){
-                    desencriptado[i] = desencriptado[i] + 16;
-                }
-                else{
+                if(65 <= (unsigned int)desencriptado[i] && (unsigned int)desencriptado[i]<=90){
                     desencriptado[i] = desencriptado[i] + 32;
                 }
+
+                if(33 <= (unsigned int)desencriptado[i] && (unsigned int)desencriptado[i]<=42){
+                    desencriptado[i] = desencriptado[i] + 16;
+                }
+
+
             }
             unsigned int tamanoDescomprimido = 0;
 
@@ -57,6 +64,9 @@ int main()
                 cout << endl << "La rotacion utilizada de la compresion es: " << rotacion;
                 cin.get();
                 return 0;
+            }
+            if(correcto==0){
+
             }
         }        
     }
