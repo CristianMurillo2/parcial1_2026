@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-    cout << "IMPORTANTE: los archivos deben de estar guardados en la carpeta build y tener el siguiente foemato 'Encriptado#.txt'" << endl;
+    cout << "IMPORTANTE: los archivos deben de estar guardados en la carpeta build y tener el siguiente formato 'Encriptado#.txt'" << endl;
     cout << "Ingresa la cantidad de archivos que desea leer: " << endl;
     unsigned int cantArchivo = 3;
     /*
